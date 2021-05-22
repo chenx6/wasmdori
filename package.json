@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "vite": "^2.3.3"
+  },
+  "dependencies": {
+    "hyperapp": "^2.0.18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && cp libs/*.wasm dist && cp -r data dist",
+    "serve": "vite preview"
+  }
+}
