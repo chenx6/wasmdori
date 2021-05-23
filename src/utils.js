@@ -90,7 +90,7 @@ const getCurrLangNo = () => (parseInt(localStorage.getItem("languageNo")) || 0)
  */
 const navBar = state => h("nav", { class: "navbar navbar-expand-lg navbar-light bg-light" }, [
     h("div", { class: "container" }, [
-        h("a", { class: "navbar-brand", href: "/" }, text("Wasmdori")),
+        h("a", { class: "navbar-brand", href: "./" }, text("Wasmdori")),
         h("div", { class: "collapse navbar-collapse" }, [
             h("div", { class: "navbar-nav" }, [
                 h("a", { class: "nav-link", href: "./card_recognize.html" }, text(state.language.cardRecognize)),
