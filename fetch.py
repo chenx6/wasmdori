@@ -8,5 +8,5 @@ URLS = {
 }
 for filename, url in URLS.items():
     response = get(url)
-    with open(f'data/{filename}', "w") as f:
+    with open(f'public/data/{filename}', "w") as f:
         f.write(response.text)

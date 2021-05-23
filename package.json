@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp libs/*.wasm dist && cp -r data dist",
+    "build": "cp libs/*.wasm public && vite build",
     "serve": "vite preview"
   }
 }
