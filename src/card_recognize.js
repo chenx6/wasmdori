@@ -59,6 +59,15 @@ const prevPage = () => [setPage, { number: -1 }]
 const nextPage = () => [setPage, { number: +1 }]
 const ImageShowStatus = (state) => ({ ...state, showImage: !state.showImage })
 
+const SelectAll = (state) => {
+    // If selectedCard is full, remove all selected card
+    state.selectedCard.size == state.tableData.length
+        ? state.selectedCard.clear()
+        : state.tableData.forEach(v => state.selectedCard.add(v))
+    // Weird behavior, it need declaim selectedCard again to update data
+    return { ...state, selectedCard: state.selectedCard };
+}
+
 const DrawCanvas = state => {
     let img = document.getElementById("show-img");
     let dataCanvas = document.getElementById("data-canvas");
@@ -232,6 +241,7 @@ const tableCompoent = state => h("div", {}, [
         ),
         h("button", { class: "btn btn-outline-primary", onclick: [prevPage] }, text(state.language.prevPage)),
         h("button", { class: "btn btn-outline-primary", onclick: [nextPage] }, text(state.language.nextPage)),
+        h("button", { class: "btn btn-outline-primary", onclick: [SelectAll] }, text(state.language.selectAll)),
         h("button", { class: "btn btn-primary", onclick: [GenerateResult] }, text(state.language.generate))
     ])
 ])
