@@ -1,7 +1,9 @@
 import { resolve } from 'path'
 
 export default {
+  base: "/wasmdori/",
   build: {
+    outDir: "docs",
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
