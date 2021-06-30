@@ -91,7 +91,18 @@ const getCurrLangNo = () => (parseInt(localStorage.getItem("languageNo")) || 0)
 const navBar = state => h("nav", { class: "navbar navbar-expand-lg navbar-light bg-light" }, [
     h("div", { class: "container" }, [
         h("a", { class: "navbar-brand", href: "./" }, text("Wasmdori")),
-        h("div", { class: "collapse navbar-collapse" }, [
+        h("button", {
+            class: "navbar-toggler collapsed",
+            type: "button",
+            "data-bs-toggle": "collapse",
+            "data-bs-target": "#navbarNavAltMarkup",
+            "aria-controls": "navbarNavAltMarkup",
+            "aria-expanded": "false",
+            "aria-label": "Toggle navigation"
+        }, [
+            h("span", { class: "navbar-toggler-icon" })
+        ]),
+        h("div", { id: "navbarNavAltMarkup", class: "collapse navbar-collapse" }, [
             h("div", { class: "navbar-nav" }, [
                 h("a", { class: "nav-link", href: "./card_recognize.html" }, text(state.language.cardRecognize)),
                 h("a", { class: "nav-link", href: "./team_builder.html" }, text(state.language.teamBuilder)),
