@@ -11,7 +11,20 @@ const StoreProfile = (state, index) => {
 }
 
 const NewProfile = state => {
-    let newProfile = { name: "Profile " + Date.now().toString(), server: 1, data: "" };
+    let newProfile = {
+        "name": "Profile " + Date.now().toString(), "server": 1,
+        "compression": "1", "data": "", "items": {
+            "Menu": [4, 4, 4, 4],
+            "Plaza": [4, 4, 4, 4],
+            "Roselia": [4, 4, 4, 4, 4, 4, 4],
+            "Everyone": [4, 4, 4, 4, 4, 4, 4],
+            "Magazine": [4, 4, 4],
+            "Afterglow": [4, 4, 4, 4, 4, 4, 4],
+            "PoppinParty": [4, 4, 4, 4, 4, 4, 4],
+            "PastelPalettes": [4, 4, 4, 4, 4, 4, 4],
+            "HelloHappyWorld": [4, 4, 4, 4, 4, 4, 4]
+        }
+    }
     state.profiles.push(newProfile);
     return { ...state, profiles: state.profiles };
 }
