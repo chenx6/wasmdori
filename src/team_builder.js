@@ -6,7 +6,8 @@ import {
     navBar,
     getResURL,
     getCurrLangNo,
-    ServerChange
+    ServerChange,
+    selectedProfileLoader
 } from "./utils.js"
 import { translates } from "./languages.js"
 import init, { gene_score } from '../libs/wasmdori.js';
@@ -52,11 +53,6 @@ const GotCharacterData = (state, data) => {
     }
 }
 
-const UserProfileChanged = (state, event) => ({
-    ...state,
-    userProfile: event.target.value
-})
-
 const PropBonusChanged = (state, event) => ({
     ...state,
     propBonus: parseFloat(event.target.value) / 100
@@ -74,7 +70,7 @@ const AllFitBonusChanged = (state, event) => ({
 
 const BuildTeam = state => {
     // Input validation
-    if (state.selectedCharacters.length != 5) {
+    if (state.selectedCharacters.length != 5 || state.selectedProfile === null) {
         return state;
     }
     let event_bonus = {
@@ -88,7 +84,7 @@ const BuildTeam = state => {
     const begin = Date.now();
     let result = gene_score(event_bonus,
         state.rawCards,
-        JSON.parse(state.userProfile),
+        state.selectedProfile,
         state.rawCharacters,
         state.rawBands);
     console.log("Time: %d", Date.now() - begin);
@@ -127,13 +123,6 @@ const characterInputGroup = state => h("div", { class: "row p-1" }, [
             state.characters
                 .map(character => characterInputBox(state, character))
         )
-    ])
-])
-
-const userProfileInput = state => h("div", { class: "row p-1" }, [
-    h("div", { class: "col" }, [
-        h("label", { for: "user-profile" }, text(state.language.userProfile)),
-        h("textarea", { class: "form-control", name: "user-profile", onchange: UserProfileChanged })
     ])
 ])
 
@@ -198,7 +187,6 @@ app({
         selectedCharacters: [], // Selected bonus character
         server: 0,
         language: translates[getCurrLangNo()],
-        userProfile: "",
         prop: "happy", // Bonus properity
         parameter: "happy", // Bonus parameter
         propBonus: 0,
@@ -207,18 +195,20 @@ app({
         bestTeam: [], // Calculated result
         rawCharacters: {}, // Bestdori's raw data
         rawBands: null,
-        rawCards: null
+        rawCards: null,
+        profiles: [], // All profiles
+        selectedProfile: {} // Primary profile
     },
     jsonFetcher("data/characters.json", GotCharacterData),
     jsonFetcher("data/bands.json", GotBandsData),
-    jsonFetcher("data/cards.json", GotCardsData)
+    jsonFetcher("data/cards.json", GotCardsData),
+    selectedProfileLoader()
     ],
     view: state => h("div", {}, [
         navBar(state),
         h("div", { class: "container" }, [
             serverSelect(state),
             characterInputGroup(state),
-            userProfileInput(state),
             h("div", { class: "row p-1" }, [
                 selectPropBox(state),
                 selectParaBox(state),
