@@ -34,6 +34,14 @@ const zh_CN = {
     propBonus: "属性加成大小",
     characterBonus: "角色加成大小",
     allFitBonus: "所有匹配时加成大小",
+    selectProfile: "选择用户资料",
+    profile: "用户资料",
+    profileName: "资料名字",
+    profileServer: "资料服务器",
+    importProfileData: "导入资料数据",
+    setPrimaryData: "设置为首选资料",
+    createNewProfile: "创建新资料",
+    deleteProfile: "删除资料"
 };
 
 // English translation
@@ -72,6 +80,14 @@ const en_US = {
     propBonus: "Prop bonus",
     characterBonus: "Character bonus",
     allFitBonus: "All fit bonus",
+    profile: "User Profile",
+    selectProfile: "Select profile",
+    profileName: "Profile name",
+    profileServer: "Profile server",
+    importProfileData: "Import profile",
+    setPrimaryData: "Set as primary profile",
+    createNewProfile: "Create new profile",
+    deleteProfile: "Delete profile"
 }
 
 // TODO: More translation and language

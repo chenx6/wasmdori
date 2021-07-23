@@ -6,7 +6,8 @@ import {
     navBar,
     getResURL,
     getCurrLangNo,
-    ServerChange
+    ServerChange,
+    selectedProfileLoader
 } from "./utils.js"
 import { translates } from "./languages.js"
 import init, { gene_score } from '../libs/wasmdori.js';
@@ -52,9 +53,12 @@ const GotCharacterData = (state, data) => {
     }
 }
 
-const UserProfileChanged = (state, event) => ({
-    ...state,
-    userProfile: event.target.value
+const GotSongData = (state, data) => ({
+    ...state, selectedSong: songNotes(data)
+})
+
+const GotSkillData = (state, data) => ({
+    ...state, rawSkills: data
 })
 
 const PropBonusChanged = (state, event) => ({
@@ -72,9 +76,67 @@ const AllFitBonusChanged = (state, event) => ({
     allFitBonus: parseFloat(event.target.value) / 100
 })
 
+// A Shim aims to fit Bestdori's new song format
+const songNotes = (apiChart) => {
+    let notes = [];
+    let timePerBeat = 0;
+    let prevBeat = 0;
+    let currTime = 0;
+    apiChart
+        .filter(t => 'BPM' === t.type)
+        .sort((t, e) => t.beat - e.beat)
+        .forEach(s => {
+            currTime += (s.beat - prevBeat) * timePerBeat;
+            prevBeat = s.beat;
+            timePerBeat = 60 / s.bpm;
+            notes.unshift({
+                beat: prevBeat,
+                time: currTime,
+                timePerBeat: timePerBeat
+            });
+        });
+    const calcTime = e => {
+        for (let its = 0; its < notes.length; its++) {
+            let s = notes[its];
+            if (e >= s.beat)
+                return s.time + (e - s.beat) * s.timePerBeat
+        }
+        return 0;
+    };
+    const feverStartNote = apiChart.find(t => 'System' === t.type && 'cmd_fever_start.wav' === t.data);
+    const feverEndNote = apiChart.find(t => 'System' === t.type && 'cmd_fever_end.wav' === t.data);
+    const feverStart = feverStartNote ? feverStartNote.beat : -1;
+    const feverEnd = feverEndNote ? feverEndNote.beat : -1;
+    let oldList = [];
+    apiChart.forEach(t => {
+        switch (t.type) {
+            case 'Single':
+            case 'Directional':
+                oldList.push({
+                    time: calcTime(t.beat),
+                    fever: t.beat >= feverStart && t.beat <= feverEnd,
+                    skill: t.skill
+                });
+                break;
+            case 'Slide':
+            case 'Long':
+                t.connections.forEach(t => {
+                    t.hidden || oldList.push({
+                        time: calcTime(t.beat),
+                        fever: t.beat >= feverStart && t.beat <= feverEnd,
+                        skill: t.skill
+                    })
+                });
+                break;
+        }
+    });
+    oldList.sort((t, e) => t.time - e.time || !!e.skill - !!t.skill);
+    return oldList;
+}
+
 const BuildTeam = state => {
     // Input validation
-    if (state.selectedCharacters.length != 5) {
+    if (state.selectedCharacters.length != 5 || state.selectedProfile === null) {
         return state;
     }
     let event_bonus = {
@@ -88,9 +150,11 @@ const BuildTeam = state => {
     const begin = Date.now();
     let result = gene_score(event_bonus,
         state.rawCards,
-        JSON.parse(state.userProfile),
+        state.selectedProfile,
         state.rawCharacters,
-        state.rawBands);
+        state.rawBands,
+        state.selectedSong,
+        state.rawSkills);
     console.log("Time: %d", Date.now() - begin);
     return {
         ...state,
@@ -127,13 +191,6 @@ const characterInputGroup = state => h("div", { class: "row p-1" }, [
             state.characters
                 .map(character => characterInputBox(state, character))
         )
-    ])
-])
-
-const userProfileInput = state => h("div", { class: "row p-1" }, [
-    h("div", { class: "col" }, [
-        h("label", { for: "user-profile" }, text(state.language.userProfile)),
-        h("textarea", { class: "form-control", name: "user-profile", onchange: UserProfileChanged })
     ])
 ])
 
@@ -198,7 +255,6 @@ app({
         selectedCharacters: [], // Selected bonus character
         server: 0,
         language: translates[getCurrLangNo()],
-        userProfile: "",
         prop: "happy", // Bonus properity
         parameter: "happy", // Bonus parameter
         propBonus: 0,
@@ -207,18 +263,24 @@ app({
         bestTeam: [], // Calculated result
         rawCharacters: {}, // Bestdori's raw data
         rawBands: null,
-        rawCards: null
+        rawCards: null,
+        rawSkills: null,
+        profiles: [], // All profiles
+        selectedProfile: {}, // Primary profile,
+        selectedSong: {} // Song data from bestdori
     },
     jsonFetcher("data/characters.json", GotCharacterData),
     jsonFetcher("data/bands.json", GotBandsData),
-    jsonFetcher("data/cards.json", GotCardsData)
+    jsonFetcher("data/cards.json", GotCardsData),
+    jsonFetcher("data/125.expert.json", GotSongData), // TODO: REPLACE A to Z！A to Z！天下を, A to Z！A to Z！取ります！
+    jsonFetcher("data/skills.json", GotSkillData),
+    selectedProfileLoader()
     ],
     view: state => h("div", {}, [
         navBar(state),
         h("div", { class: "container" }, [
             serverSelect(state),
             characterInputGroup(state),
-            userProfileInput(state),
             h("div", { class: "row p-1" }, [
                 selectPropBox(state),
                 selectParaBox(state),

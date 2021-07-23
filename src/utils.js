@@ -106,6 +106,7 @@ const navBar = state => h("nav", { class: "navbar navbar-expand-lg navbar-light 
             h("div", { class: "navbar-nav" }, [
                 h("a", { class: "nav-link", href: "./card_recognize.html" }, text(state.language.cardRecognize)),
                 h("a", { class: "nav-link", href: "./team_builder.html" }, text(state.language.teamBuilder)),
+                h("a", { class: "nav-link", href: "./profile.html" }, text(state.language.profile)),
                 h("div", { class: "nav-item dropdown" }, [
                     h("a", {
                         href: "#",
@@ -139,6 +140,60 @@ const ServerChange = (state, event) => ({
     server: parseInt(event.target.value)
 })
 
+/**
+ * Load profiles data from localStorage
+ * @param {*} dispatch dispatch function
+ * @param {*} param1 action
+ */
+const loadProfile = (dispatch, { action }) => {
+    const profileStr = localStorage.getItem("profiles");
+    let profiles = [];
+    if (profileStr !== null && profileStr.length !== 0) {
+        profiles = JSON.parse(profileStr);
+    }
+    dispatch(action, profiles);
+}
+
+/**
+ * Got profile and set it to state
+ * @param {*} state app's state
+ * @param {*} data profiles data
+ * @returns new state
+ */
+const GotProfile = (state, data) => ({
+    ...state,
+    profiles: data
+})
+
+/**
+ * Got selected profile and set it to state
+ * @param {*} state app's state
+ * @param {*} data profiles data
+ * @returns new state
+ */
+const GotSelectedProfile = (state, data) => {
+    // Get primaryProfileS
+    let primaryProfileS = localStorage.getItem("primaryProfile");
+    let primaryProfile = 0;
+    if (primaryProfileS !== null) {
+        primaryProfile = parseInt(primaryProfileS);
+    }
+    // Get selectedProfile
+    let selectedProfile = data[primaryProfile];
+    if (data.length <= primaryProfile) {
+        selectedProfile = null;
+    }
+    return {
+        ...state,
+        profiles: data,
+        selectedProfile: selectedProfile
+    }
+}
+
+const selectedProfileLoader = () => [loadProfile, { action: GotSelectedProfile }]
+
+const profileLoader = () => [loadProfile, { action: GotProfile }]
+
 export {
     jsonFetcher,
     fetchJson,
@@ -149,5 +204,7 @@ export {
     getResURL,
     getCurrLangNo,
     navBar,
-    ServerChange
+    ServerChange,
+    profileLoader,
+    selectedProfileLoader
 }
