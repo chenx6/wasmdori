@@ -53,6 +53,14 @@ const GotCharacterData = (state, data) => {
     }
 }
 
+const GotSongData = (state, data) => ({
+    ...state, selectedSong: data
+})
+
+const GotSkillData = (state, data) => ({
+    ...state, rawSkills: data
+})
+
 const PropBonusChanged = (state, event) => ({
     ...state,
     propBonus: parseFloat(event.target.value) / 100
@@ -86,7 +94,9 @@ const BuildTeam = state => {
         state.rawCards,
         state.selectedProfile,
         state.rawCharacters,
-        state.rawBands);
+        state.rawBands,
+        state.selectedSong,
+        state.rawSkills);
     console.log("Time: %d", Date.now() - begin);
     return {
         ...state,
@@ -196,12 +206,16 @@ app({
         rawCharacters: {}, // Bestdori's raw data
         rawBands: null,
         rawCards: null,
+        rawSkills: null,
         profiles: [], // All profiles
-        selectedProfile: {} // Primary profile
+        selectedProfile: {}, // Primary profile,
+        selectedSong: {} // Song data from bestdori
     },
     jsonFetcher("data/characters.json", GotCharacterData),
     jsonFetcher("data/bands.json", GotBandsData),
     jsonFetcher("data/cards.json", GotCardsData),
+    jsonFetcher("data/125.expert.json", GotSongData), // TODO: REPLACE A to Z！A to Z！天下を, A to Z！A to Z！取ります！
+    jsonFetcher("data/skills.json", GotSkillData),
     selectedProfileLoader()
     ],
     view: state => h("div", {}, [
