@@ -8,7 +8,8 @@ export default {
       input: {
         main: resolve(__dirname, 'index.html'),
         card_recognize: resolve(__dirname, 'card_recognize.html'),
-        team_builder: resolve(__dirname, 'team_builder.html')
+        team_builder: resolve(__dirname, 'team_builder.html'),
+        profile: resolve(__dirname, 'profile.html')
       }
     }
   }

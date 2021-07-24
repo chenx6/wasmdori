@@ -60,7 +60,8 @@ const geneEncodedStr = cards => {
 const getResURL = (card, cardId) => {
     let partNum = Math.floor(parseInt(cardId) / 50);
     let part = partNum.toString().padStart(5, '0');
-    return `https://bestdori.com/assets/cn/thumb/chara/card${part}_rip/${card.resourceSetName}_after_training.png`;
+    let suffix = card.rarity <= 2 ? "normal" : "after_training"; // Card(rarity < 2) only has normal card image
+    return `https://bestdori.com/assets/cn/thumb/chara/card${part}_rip/${card.resourceSetName}_${suffix}.png`;
 }
 
 /**
@@ -194,6 +195,23 @@ const selectedProfileLoader = () => [loadProfile, { action: GotSelectedProfile }
 
 const profileLoader = () => [loadProfile, { action: GotProfile }]
 
+/**
+ * Remove duplicated card in profile's data
+ * @param {string} data origin data 
+ * @returns cleaned data
+ */
+const RemoveDuplicatedCard = (data) => {
+    let set = new Set();
+    for (let i = 0; i < data.length; i += 5) {
+        set.add(data.slice(i, i + 5));
+    }
+    let cleaned = "";
+    for (const card of set) {
+        cleaned += card;
+    }
+    return cleaned;
+}
+
 export {
     jsonFetcher,
     fetchJson,
@@ -206,5 +224,6 @@ export {
     navBar,
     ServerChange,
     profileLoader,
-    selectedProfileLoader
+    selectedProfileLoader,
+    RemoveDuplicatedCard
 }
