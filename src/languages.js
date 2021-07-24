@@ -41,7 +41,8 @@ const zh_CN = {
     importProfileData: "导入资料数据",
     setPrimaryData: "设置为首选资料",
     createNewProfile: "创建新资料",
-    deleteProfile: "删除资料"
+    deleteProfile: "删除资料",
+    appendToProfile: "附加到资料"
 };
 
 // English translation
@@ -87,7 +88,8 @@ const en_US = {
     importProfileData: "Import profile",
     setPrimaryData: "Set as primary profile",
     createNewProfile: "Create new profile",
-    deleteProfile: "Delete profile"
+    deleteProfile: "Delete profile",
+    appendToProfile: "Append to profile"
 }
 
 // TODO: More translation and language

@@ -7,7 +7,9 @@ import {
     getResURL,
     getCurrLangNo,
     ServerChange,
-    navBar
+    navBar,
+    selectedProfileLoader,
+    RemoveDuplicatedCard
 } from "./utils.js"
 import { translates } from "./languages.js"
 import Module from "../libs/card_recognize.js"
@@ -171,6 +173,23 @@ const GenerateResult = state => {
     }
 }
 
+const AppendToProfile = state => {
+    // Get data from localStorage
+    let profilesS = localStorage.getItem("profiles");
+    let primaryProfileS = localStorage.getItem("primaryProfile");
+    if (profilesS !== null && primaryProfileS !== null) {
+        let profiles = JSON.parse(profilesS);
+        let primaryProfile = parseInt(primaryProfileS);
+
+        // Append result to primary profile
+        state = GenerateResult(state);
+        let data = profiles[primaryProfile].data + state.result;
+        profiles[primaryProfile].data = RemoveDuplicatedCard(data); // Clean duplicated card in profile
+        localStorage.setItem("profiles", JSON.stringify(profiles));
+    }
+    return { ...state };
+}
+
 // Views
 
 const screenshotSelect = state => h("div", { class: "row p-1" }, [
@@ -234,7 +253,7 @@ const tableCompoent = state => h("div", {}, [
         ]),
         tableBody(state)
     ]),
-    h("div", { class: "input-group justify-content-md-center" }, [
+    h("div", { class: "input-group justify-content-md-center p-1" }, [
         h("button",
             { class: "btn btn-outline-primary", onclick: [ImageShowStatus] },
             text(state.showImage ? state.language.hideImage : state.language.showImage)
@@ -242,7 +261,10 @@ const tableCompoent = state => h("div", {}, [
         h("button", { class: "btn btn-outline-primary", onclick: [prevPage] }, text(state.language.prevPage)),
         h("button", { class: "btn btn-outline-primary", onclick: [nextPage] }, text(state.language.nextPage)),
         h("button", { class: "btn btn-outline-primary", onclick: [SelectAll] }, text(state.language.selectAll)),
-        h("button", { class: "btn btn-primary", onclick: [GenerateResult] }, text(state.language.generate))
+    ]),
+    h("div", { class: "input-group justify-content-md-center p-1" }, [
+        h("button", { class: "btn btn-primary", onclick: [GenerateResult] }, text(state.language.generate)),
+        h("button", { class: "btn btn-secondary", onclick: [AppendToProfile] }, text(state.language.appendToProfile))
     ])
 ])
 
@@ -283,12 +305,15 @@ app({
             rawCharacters: null, // Bestdori's raw data
             rawHashes: null,
             rawCards: null,
-            mod: null
+            mod: null,
+            profiles: null,
+            selectedProfile: null
         },
         jsonFetcher("data/characters.json", GotCharacterData),
         jsonFetcher("data/hashes.json", GotHashesData),
         jsonFetcher("data/cards.json", GotCardsData),
-        [initModule, { action: GotMod }]
+        [initModule, { action: GotMod }],
+        selectedProfileLoader()
     ],
     view: state => h("div", {}, [
         navBar(state),
