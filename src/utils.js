@@ -110,6 +110,7 @@ const navBar = state => h("nav", { class: "navbar navbar-expand-lg navbar-light 
                 h("a", { class: "nav-link", href: "./card_recognize.html" }, text(state.language.cardRecognize)),
                 h("a", { class: "nav-link", href: "./team_builder.html" }, text(state.language.teamBuilder)),
                 h("a", { class: "nav-link", href: "./profile.html" }, text(state.language.profile)),
+                h("a", { class: "nav-link", href: "./gacha.html" }, text(state.language.eventGacha)),
                 h("div", { class: "nav-item dropdown" }, [
                     h("a", {
                         href: "#",
@@ -215,6 +216,21 @@ const RemoveDuplicatedCard = (data) => {
 }
 
 /**
+ * Get gacha link
+ * @param gachaName
+ * @returns {string}
+ */
+const getGachaLink = (gachaName) => (gachaName[1] ? gachaName[1] : gachaName[0]).replace(/[^a-z0-9]+/gi, ' ').replace(/\s+/g, '-')
+
+/**
+ * Get banner URL
+ * @param {string} server server shorthand(like cn)
+ * @param {string} bannerId banner resource id
+ * @returns 
+ */
+const getBannerUrl = (server, bannerId) => `https://bestdori.com/assets/${server}/homebanner_rip/${bannerId}.png`
+
+/**
  * Select server option box
  * @param {*} state 
  * @returns 
@@ -238,6 +254,8 @@ export {
     GotCardsData,
     GotHashesData,
     geneEncodedStr,
+    getGachaLink,
+    getBannerUrl,
     getResURL,
     getCurrLangNo,
     navBar,
