@@ -1,0 +1,152 @@
+/* https://stackoverflow.com/questions/18235709/css-placing-one-image-on-top-of-another */
+
+.game-card-container {
+    position: relative;
+    width: 68px;
+    height: 68px;
+}
+
+.game-card {
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    height: 64px;
+    width: 64px;
+}
+
+/* Card border */
+.game-card-border {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 68px;
+    height: 68px;
+}
+
+.game-card-border-4 {
+    background: url("../res/card-4.png");
+    background-size: 100%;
+}
+
+.game-card-border-3 {
+    background: url("../res/card-3.png");
+    background-size: 100%;
+}
+
+.game-card-border-2 {
+    background: url("../res/card-2.png");
+    background-size: 100%;
+}
+
+.game-card-border-1 {
+    background: url("../res/card-2.png");
+    background-size: 100%;
+}
+
+/* Band */
+.game-card-band {
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+}
+
+.game-card-band-1 {
+    background: url("../res/band_1.svg");
+    background-size: 100%;
+}
+
+.game-card-band-2 {
+    background: url("../res/band_2.svg");
+    background-size: 100%;
+}
+
+.game-card-band-3 {
+    background: url("../res/band_3.svg");
+    background-size: 100%;
+}
+
+.game-card-band-4 {
+    background: url("../res/band_4.svg");
+    background-size: 100%;
+}
+
+.game-card-band-5 {
+    background: url("../res/band_5.svg");
+    background-size: 100%;
+}
+
+.game-card-band-21 {
+    background: url("../res/band_21.svg");
+    background-size: 100%;
+}
+
+/* Prop */
+.game-card-prop {
+    position: absolute;
+    left: 51px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+}
+
+.game-card-prop-powerful {
+    background: url("../res/powerful.svg");
+    background-size: 100%;
+}
+
+.game-card-prop-pure {
+    background: url("../res/pure.svg");
+    background-size: 100%;
+}
+
+.game-card-prop-cool {
+    background: url("../res/cool.svg");
+    background-size: 100%;
+}
+
+.game-card-prop-happy {
+    background: url("../res/happy.svg");
+    background-size: 100%;
+}
+
+/* Star */
+.game-card-star {
+    position: absolute;
+    background: url("../res/star.png");
+    background-size: 100%;
+    left: 1px;
+    width: 12px;
+    height: 12px;
+}
+
+.game-card-star-trained {
+    position: absolute;
+    background: url("../res/star_trained.png");
+    background-size: 100%;
+    left: 1px;
+    width: 12px;
+    height: 12px;
+}
+
+/* Star's position */
+.game-card-star-p1 {
+    top: 80%;
+}
+
+.game-card-star-p2 {
+    top: 65%;
+}
+
+.game-card-star-p3 {
+    top: 50%;
+}
+
+.game-card-star-p4 {
+    top: 35%;
+}
+
+.banner {
+    width: 100%;
+}

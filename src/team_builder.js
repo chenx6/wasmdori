@@ -6,7 +6,7 @@ import {
     navBar,
     getResURL,
     getCurrLangNo,
-    ServerChange,
+    serverSelect,
     selectedProfileLoader
 } from "./utils.js"
 import { translates } from "./languages.js"
@@ -163,18 +163,6 @@ const BuildTeam = state => {
 }
 
 // Views
-
-const serverSelect = state => h("div", { class: "row p-1" }, [
-    h("div", { class: "col" }, [
-        h("label", { for: "server" }, text(state.language.selectServer)),
-        h("select", { name: "server", id: "server", class: "form-select", onchange: ServerChange }, [
-            h("option", { value: "0" }, text("日本")),
-            h("option", { value: "1" }, text("International")),
-            h("option", { value: "2" }, text("繁体中文")),
-            h("option", { value: "3" }, text("简体中文")),
-        ])
-    ])
-])
 
 // Character select box
 const characterInputBox = (state, character) =>
