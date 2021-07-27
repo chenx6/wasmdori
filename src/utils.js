@@ -55,12 +55,14 @@ const geneEncodedStr = cards => {
 /**
  * Generate resources url
  * @param {*} card Bestdori's card data
+ * @param cardId card id
+ * @param trained card is trained or not
  * @returns {string} url
  */
-const getResURL = (card, cardId) => {
+const getResURL = (card, cardId, trained=true) => {
     let partNum = Math.floor(parseInt(cardId) / 50);
     let part = partNum.toString().padStart(5, '0');
-    let suffix = card.rarity <= 2 ? "normal" : "after_training"; // Card(rarity < 2) only has normal card image
+    let suffix = card.rarity <= 2 || !trained ? "normal" : "after_training"; // Card(rarity < 2) only has normal card image
     return `https://bestdori.com/assets/cn/thumb/chara/card${part}_rip/${card.resourceSetName}_${suffix}.png`;
 }
 
@@ -108,6 +110,7 @@ const navBar = state => h("nav", { class: "navbar navbar-expand-lg navbar-light 
                 h("a", { class: "nav-link", href: "./card_recognize.html" }, text(state.language.cardRecognize)),
                 h("a", { class: "nav-link", href: "./team_builder.html" }, text(state.language.teamBuilder)),
                 h("a", { class: "nav-link", href: "./profile.html" }, text(state.language.profile)),
+                h("a", { class: "nav-link", href: "./gacha.html" }, text(state.language.eventGacha)),
                 h("div", { class: "nav-item dropdown" }, [
                     h("a", {
                         href: "#",
@@ -212,6 +215,38 @@ const RemoveDuplicatedCard = (data) => {
     return cleaned;
 }
 
+/**
+ * Get gacha link
+ * @param gachaName
+ * @returns {string}
+ */
+const getGachaLink = (gachaName) => (gachaName[1] ? gachaName[1] : gachaName[0]).replace(/[^a-z0-9]+/gi, ' ').replace(/\s+/g, '-')
+
+/**
+ * Get banner URL
+ * @param {string} server server shorthand(like cn)
+ * @param {string} bannerId banner resource id
+ * @returns 
+ */
+const getBannerUrl = (server, bannerId) => `https://bestdori.com/assets/${server}/homebanner_rip/${bannerId}.png`
+
+/**
+ * Select server option box
+ * @param {*} state 
+ * @returns 
+ */
+const serverSelect = (state, handleFunc=ServerChange) => h("div", { class: "row p-1" }, [
+    h("div", { class: "col" }, [
+        h("label", { for: "server" }, text(state.language.selectServer)),
+        h("select", { name: "server", id: "server", class: "form-select", onchange: handleFunc }, [
+            h("option", { value: "0" }, text("日本")),
+            h("option", { value: "1" }, text("International")),
+            h("option", { value: "2" }, text("繁体中文")),
+            h("option", { value: "3" }, text("简体中文")),
+        ])
+    ])
+])
+
 export {
     jsonFetcher,
     fetchJson,
@@ -219,11 +254,14 @@ export {
     GotCardsData,
     GotHashesData,
     geneEncodedStr,
+    getGachaLink,
+    getBannerUrl,
     getResURL,
     getCurrLangNo,
     navBar,
     ServerChange,
     profileLoader,
     selectedProfileLoader,
-    RemoveDuplicatedCard
+    RemoveDuplicatedCard,
+    serverSelect
 }

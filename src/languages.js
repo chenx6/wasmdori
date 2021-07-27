@@ -42,7 +42,11 @@ const zh_CN = {
     setPrimaryData: "设置为首选资料",
     createNewProfile: "创建新资料",
     deleteProfile: "删除资料",
-    appendToProfile: "附加到资料"
+    appendToProfile: "附加到资料",
+    eventGacha: "卡池千里眼",
+    pageCount: "选择页面活动个数",
+    startEvent: "选择开始活动",
+    loading: "加载中",
 };
 
 // English translation
@@ -89,7 +93,11 @@ const en_US = {
     setPrimaryData: "Set as primary profile",
     createNewProfile: "Create new profile",
     deleteProfile: "Delete profile",
-    appendToProfile: "Append to profile"
+    appendToProfile: "Append to profile",
+    eventGacha: "Event-Gacha-Viewer",
+    pageCount: "Select item per page",
+    startEvent: "Select start event",
+    loading: "Loading",
 }
 
 // TODO: More translation and language
