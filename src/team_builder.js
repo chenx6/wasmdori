@@ -76,6 +76,11 @@ const AllFitBonusChanged = (state, event) => ({
     allFitBonus: parseFloat(event.target.value) / 100
 })
 
+const EventTypeChanged = (state, event) => ({
+    ...state,
+    eventType: parseInt(event.target.value)
+})
+
 // A Shim aims to fit Bestdori's new song format
 const songNotes = (apiChart) => {
     let notes = [];
@@ -154,7 +159,8 @@ const BuildTeam = state => {
         state.rawCharacters,
         state.rawBands,
         state.selectedSong,
-        state.rawSkills);
+        state.rawSkills,
+        state.eventType);
     console.log("Time: %d", Date.now() - begin);
     return {
         ...state,
@@ -225,6 +231,16 @@ const bonusInput = state => h("div", { class: "row p-1" }, [
     ]),
 ])
 
+const eventTypeInput = state => h("div", { class: "row p-1" }, [
+    h("div", { class: "col" }, [
+        h("label", { class: "form-label" }, text(state.language.selectMode)),
+        h("select", { class: "form-select", onchange: EventTypeChanged }, [
+            ...[state.language.freePlay, state.language.multiPlay, state.language.vsPlay]
+                .map((v, idx) => h("option", { value: idx.toString() }, text(v)))
+        ])
+    ])
+])
+
 const resultTeamView = state => h("div", { class: "row justify-content-md-center p-1" },
     Object.values(state.bestTeam).map((v) => h("div", { class: "card col" }, [
         // Use getResURL to get card's image
@@ -248,6 +264,7 @@ app({
         propBonus: 0,
         characterBonus: 0,
         allFitBonus: 0,
+        eventType: 0,
         bestTeam: [], // Calculated result
         rawCharacters: {}, // Bestdori's raw data
         rawBands: null,
@@ -274,6 +291,7 @@ app({
                 selectParaBox(state),
             ]),
             bonusInput(state),
+            eventTypeInput(state),
             h("div", { class: "row p-1" }, [
                 h("div", { claas: "col" }, [
                     h("button", { class: "btn btn-primary", onclick: [BuildTeam] }, text(state.language.generate))
