@@ -55,12 +55,14 @@ const geneEncodedStr = cards => {
 /**
  * Generate resources url
  * @param {*} card Bestdori's card data
+ * @param cardId card id
+ * @param trained card is trained or not
  * @returns {string} url
  */
-const getResURL = (card, cardId) => {
+const getResURL = (card, cardId, trained=true) => {
     let partNum = Math.floor(parseInt(cardId) / 50);
     let part = partNum.toString().padStart(5, '0');
-    let suffix = card.rarity <= 2 ? "normal" : "after_training"; // Card(rarity < 2) only has normal card image
+    let suffix = card.rarity <= 2 || !trained ? "normal" : "after_training"; // Card(rarity < 2) only has normal card image
     return `https://bestdori.com/assets/cn/thumb/chara/card${part}_rip/${card.resourceSetName}_${suffix}.png`;
 }
 
@@ -212,6 +214,23 @@ const RemoveDuplicatedCard = (data) => {
     return cleaned;
 }
 
+/**
+ * Select server option box
+ * @param {*} state 
+ * @returns 
+ */
+const serverSelect = (state, handleFunc=ServerChange) => h("div", { class: "row p-1" }, [
+    h("div", { class: "col" }, [
+        h("label", { for: "server" }, text(state.language.selectServer)),
+        h("select", { name: "server", id: "server", class: "form-select", onchange: handleFunc }, [
+            h("option", { value: "0" }, text("日本")),
+            h("option", { value: "1" }, text("International")),
+            h("option", { value: "2" }, text("繁体中文")),
+            h("option", { value: "3" }, text("简体中文")),
+        ])
+    ])
+])
+
 export {
     jsonFetcher,
     fetchJson,
@@ -225,5 +244,6 @@ export {
     ServerChange,
     profileLoader,
     selectedProfileLoader,
-    RemoveDuplicatedCard
+    RemoveDuplicatedCard,
+    serverSelect
 }
