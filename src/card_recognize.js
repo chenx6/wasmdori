@@ -6,7 +6,7 @@ import {
     geneEncodedStr,
     getResURL,
     getCurrLangNo,
-    ServerChange,
+    serverSelect,
     navBar,
     selectedProfileLoader,
     RemoveDuplicatedCard
@@ -196,18 +196,6 @@ const screenshotSelect = state => h("div", { class: "row p-1" }, [
     h("div", { class: "col" }, [
         h("label", { for: "screenshot-select", class: "form-label" }, text(state.language.selectScreenshot)),
         h("input", { type: "file", name: "screenshot-select", class: "form-control", onchange: ChangeScreenshot })
-    ])
-])
-
-const serverSelect = state => h("div", { class: "row p-1" }, [
-    h("div", { class: "col" }, [
-        h("label", { for: "server" }, text(state.language.selectServer)),
-        h("select", { name: "server", id: "server", class: "form-select", onchange: ServerChange }, [
-            h("option", { value: "0" }, text("日本")),
-            h("option", { value: "1" }, text("International")),
-            h("option", { value: "2" }, text("繁体中文")),
-            h("option", { value: "3" }, text("简体中文")),
-        ])
     ])
 ])
 
