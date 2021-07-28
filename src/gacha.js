@@ -89,7 +89,7 @@ const SetPageCount = (state, event) => ({ ...state, pageCount: parseInt(event.ta
 // Views
 
 // Card thumb in game
-const gameCard = (card, cardId, character, stars, trained = false) => h("div", { class: "col-md-auto p-2" }, [
+const gameCard = (card, cardId, character, stars, trained = false) => h("div", { class: "col-auto p-2" }, [
     h("div", { class: "game-card-container" }, [
         h("img", { src: getResURL(card, cardId, trained), class: "game-card", loading: "lazy" }),
         h("div", { class: `game-card-border game-card-border-${card.rarity}` }),
@@ -115,8 +115,8 @@ const horizonCard = (state, cardId) => {
             // Add padding when card's rarity <= 2
             card.rarity > 2
                 ? gameCard(card, cardId, character, trainedStar, true)
-                : h("div", { class: "col-md-auto p-2" }, [h("img", { width: "68" })]),
-            h("div", { class: "col-md-8" }, [
+                : h("div", { class: "col-auto p-2" }, [h("img", { width: "68" })]),
+            h("div", { class: "col-auto p-2" }, [
                 h("div", { class: "" }, [
                     h("div", { class: "card-text" }, text(character.characterName[state.server])),
                     h("div", { class: "card-text" }, text(card.prefix[nameIndex])),
@@ -129,7 +129,7 @@ const horizonCard = (state, cardId) => {
 
 // Event-Gacha item
 const eventGachaItem = (state, { event, gachas }) => h("div", { class: "row p-1" }, [
-    h("div", { class: "col" }, [
+    h("div", { class: "col-md-6" }, [
         h("div", { class: "card" }, [
             h("img", { src: getBannerUrl("jp", event.bannerAssetBundleName), alt: state.language.loading, loading: "lazy", class: "banner" }),
             h("div", { class: "card-body" }, [
@@ -139,7 +139,7 @@ const eventGachaItem = (state, { event, gachas }) => h("div", { class: "row p-1"
             ])
         ])
     ]),
-    h("div", { class: "col" }, [
+    h("div", { class: "col-md-6" }, [
         h("div", { class: "card" },
             gachas.map(gacha => [
                 h("img", { src: getBannerUrl("jp", gacha.bannerAssetBundleName), alt: state.language.loading, loading: "lazy", class: "banner" }),
