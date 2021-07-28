@@ -134,12 +134,10 @@ const horizonCard = (state, cardId) => {
             card.rarity > 2
                 ? gameCard(card, cardId, character, trainedStar, true)
                 : h("div", { class: "col-auto p-2" }, [h("img", { width: "68" })]),
-            h("div", { class: "col-auto p-2" }, [
-                h("div", { class: "" }, [
-                    h("div", { class: "card-text" }, text(character.characterName[state.server])),
-                    h("div", { class: "card-text" }, text(card.prefix[nameIndex])),
-                    h("div", { class: "card-text" }, text(skill.simpleDescription[state.server]))
-                ])
+            h("div", { class: "col-md-8 p-2" }, [
+                h("div", { class: "card-text" }, text(character.characterName[state.server])),
+                h("div", { class: "card-text" }, text(card.prefix[nameIndex])),
+                h("div", { class: "card-text" }, text(skill.simpleDescription[state.server]))
             ])
         ])
     ])
