@@ -6,7 +6,9 @@ URLS = {
     "cards.json": "https://bestdori.com/api/cards/all.5.json",
     "bands.json": "https://bestdori.com/api/bands/main.1.json",
     "skills.json": "https://bestdori.com/api/skills/all.10.json",
-    "125.expert.json": "https://bestdori.com/api/charts/125/expert.json"
+    "125.expert.json": "https://bestdori.com/api/charts/125/expert.json",
+    "events.json": "https://bestdori.com/api/events/all.5.json",
+    "gachas.json": "https://bestdori.com/api/gacha/all.5.json",
 }
 for filename, url in URLS.items():
     response = get(url)

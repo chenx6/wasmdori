@@ -23,7 +23,7 @@ const excludeGachaType = ["birthday", "special"];
 // Effects
 
 const GotEvents = (state, data) => {
-    return { ...state, events: data }
+    return { ...state, events: Object.values(data) }
 }
 
 const GotGachas = (state, data) => {
@@ -42,8 +42,7 @@ const GotSkillData = (state, data) => ({
 const PairEventGacha = state => {
     let pairs = [];
     let lastEventTime = 0;
-    let events = Object.values(state.events)
-    for (let event of events) {
+    for (let event of state.events) {
         // If event data in selected server doesn't have start date, we just add a time offset to previous event's date
         let serverEventStart = event.startAt[state.server];
         if (serverEventStart !== null && lastEventTime === 0) {
@@ -73,6 +72,25 @@ const PairEventGacha = state => {
 
 const ServerChange = (state, event) => {
     state.server = parseInt(event.target.value);
+    // Sort event based on state.server time, then dataIndex time
+    const sortEvent = (a, b) => {
+        const aStartData = a.startAt[dataIndex];
+        const bStartData = b.startAt[dataIndex];
+        const aStartServer = a.startAt[state.server];
+        const bStartServer = b.startAt[state.server];
+        // If event a and event b has been held before, compare their start time
+        if (aStartServer !== null && bStartServer !== null) {
+            return aStartServer - bStartServer;
+        // If event a or event b has not been held, push it to the back of the array
+        } else if (aStartServer === null && bStartServer !== null) {
+            return 1;
+        } else if (aStartServer !== null && bStartServer === null) {
+            return -1;
+        } else {
+            return aStartData - bStartData;
+        }
+    }
+    state.events.sort(sortEvent);
     state = PairEventGacha(state);
     return { ...state }
 }
@@ -89,7 +107,7 @@ const SetPageCount = (state, event) => ({ ...state, pageCount: parseInt(event.ta
 // Views
 
 // Card thumb in game
-const gameCard = (card, cardId, character, stars, trained = false) => h("div", { class: "col-md-auto p-2" }, [
+const gameCard = (card, cardId, character, stars, trained = false) => h("div", { class: "col-auto p-2" }, [
     h("div", { class: "game-card-container" }, [
         h("img", { src: getResURL(card, cardId, trained), class: "game-card", loading: "lazy" }),
         h("div", { class: `game-card-border game-card-border-${card.rarity}` }),
@@ -115,8 +133,8 @@ const horizonCard = (state, cardId) => {
             // Add padding when card's rarity <= 2
             card.rarity > 2
                 ? gameCard(card, cardId, character, trainedStar, true)
-                : h("div", { class: "col-md-auto p-2" }, [h("img", { width: "68" })]),
-            h("div", { class: "col-md-8" }, [
+                : h("div", { class: "col-auto p-2" }, [h("img", { width: "68" })]),
+            h("div", { class: "col-auto p-2" }, [
                 h("div", { class: "" }, [
                     h("div", { class: "card-text" }, text(character.characterName[state.server])),
                     h("div", { class: "card-text" }, text(card.prefix[nameIndex])),
@@ -129,7 +147,7 @@ const horizonCard = (state, cardId) => {
 
 // Event-Gacha item
 const eventGachaItem = (state, { event, gachas }) => h("div", { class: "row p-1" }, [
-    h("div", { class: "col" }, [
+    h("div", { class: "col-md-6" }, [
         h("div", { class: "card" }, [
             h("img", { src: getBannerUrl("jp", event.bannerAssetBundleName), alt: state.language.loading, loading: "lazy", class: "banner" }),
             h("div", { class: "card-body" }, [
@@ -139,7 +157,7 @@ const eventGachaItem = (state, { event, gachas }) => h("div", { class: "row p-1"
             ])
         ])
     ]),
-    h("div", { class: "col" }, [
+    h("div", { class: "col-md-6" }, [
         h("div", { class: "card" },
             gachas.map(gacha => [
                 h("img", { src: getBannerUrl("jp", gacha.bannerAssetBundleName), alt: state.language.loading, loading: "lazy", class: "banner" }),
@@ -161,7 +179,7 @@ const filterView = state => h("div", { class: "row p-1" }, [
     h("div", { class: "col" }, [
         h("label", {}, text(state.language.startEvent)),
         h("select", { class: "form-select", onchange: ChangeStartEvent }, [
-            ...Object.values(state.events).map(
+            ...state.events.map(
                 (v, idx) => h("option", { value: idx.toString() },
                     text(v.eventName[state.server]
                         ? v.eventName[state.server]

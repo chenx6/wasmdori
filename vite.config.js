@@ -9,7 +9,8 @@ export default {
         main: resolve(__dirname, 'index.html'),
         card_recognize: resolve(__dirname, 'card_recognize.html'),
         team_builder: resolve(__dirname, 'team_builder.html'),
-        profile: resolve(__dirname, 'profile.html')
+        profile: resolve(__dirname, 'profile.html'),
+        eventGacha: resolve(__dirname, 'gacha.html')
       }
     }
   }
