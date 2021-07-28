@@ -81,7 +81,7 @@ const ServerChange = (state, event) => {
         // If event a and event b has been held before, compare their start time
         if (aStartServer !== null && bStartServer !== null) {
             return aStartServer - bStartServer;
-        // If event a or event b has not been held, push it to the back of the array
+            // If event a or event b has not been held, push it to the back of the array
         } else if (aStartServer === null && bStartServer !== null) {
             return 1;
         } else if (aStartServer !== null && bStartServer === null) {
@@ -218,18 +218,20 @@ app({
     jsonFetcher("data/characters.json", GotCharactersData),
     jsonFetcher("data/skills.json", GotSkillData),
     ],
-    view: state => h("div", { class: "container" }, [
+    view: state => h("div", {}, [
         navBar(state),
-        serverSelect(state, ServerChange),
-        state.events && filterView(state),
-        pageCountSelector(state),
-        (state.gachas
-            && state.events
-            && state.rawCards
-            && state.characters
-            && state.rawSkills
-            && state.eventGachaPair.length !== 0
-        ) && eventGachaList(state),
+        h("div", { class: "container" }, [
+            serverSelect(state, ServerChange),
+            state.events && filterView(state),
+            pageCountSelector(state),
+            (state.gachas
+                && state.events
+                && state.rawCards
+                && state.characters
+                && state.rawSkills
+                && state.eventGachaPair.length !== 0
+            ) && eventGachaList(state),
+        ])
     ]),
     node: document.getElementById("app")
 })
