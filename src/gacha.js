@@ -70,27 +70,29 @@ const PairEventGacha = state => {
     return { ...state, eventGachaPair: pairs };
 }
 
+// Sort event based on state.server time, then dataIndex time
+const sortEvent = (server, a, b) => {
+    const aStartData = a.startAt[dataIndex];
+    const bStartData = b.startAt[dataIndex];
+    const aStartServer = a.startAt[server];
+    const bStartServer = b.startAt[server];
+    // If event a and event b has been held before, compare their start time
+    if (aStartServer !== null && bStartServer !== null) {
+        return aStartServer - bStartServer;
+        // If event a or event b has not been held, push it to the back of the array
+    } else if (aStartServer === null && bStartServer !== null) {
+        return 1;
+    } else if (aStartServer !== null && bStartServer === null) {
+        return -1;
+    } else {
+        return aStartData - bStartData;
+    }
+}
+
 const ServerChange = (state, event) => {
     state.server = parseInt(event.target.value);
-    // Sort event based on state.server time, then dataIndex time
-    const sortEvent = (a, b) => {
-        const aStartData = a.startAt[dataIndex];
-        const bStartData = b.startAt[dataIndex];
-        const aStartServer = a.startAt[state.server];
-        const bStartServer = b.startAt[state.server];
-        // If event a and event b has been held before, compare their start time
-        if (aStartServer !== null && bStartServer !== null) {
-            return aStartServer - bStartServer;
-            // If event a or event b has not been held, push it to the back of the array
-        } else if (aStartServer === null && bStartServer !== null) {
-            return 1;
-        } else if (aStartServer !== null && bStartServer === null) {
-            return -1;
-        } else {
-            return aStartData - bStartData;
-        }
-    }
-    state.events.sort(sortEvent);
+    const sort = (...args) => sortEvent(state.server, ...args);
+    state.events.sort(sort);
     state = PairEventGacha(state);
     return { ...state }
 }
@@ -134,12 +136,10 @@ const horizonCard = (state, cardId) => {
             card.rarity > 2
                 ? gameCard(card, cardId, character, trainedStar, true)
                 : h("div", { class: "col-auto p-2" }, [h("img", { width: "68" })]),
-            h("div", { class: "col-auto p-2" }, [
-                h("div", { class: "" }, [
-                    h("div", { class: "card-text" }, text(character.characterName[state.server])),
-                    h("div", { class: "card-text" }, text(card.prefix[nameIndex])),
-                    h("div", { class: "card-text" }, text(skill.simpleDescription[state.server]))
-                ])
+            h("div", { class: "col-md-8 p-2" }, [
+                h("div", { class: "card-text" }, text(character.characterName[state.server])),
+                h("div", { class: "card-text" }, text(card.prefix[nameIndex])),
+                h("div", { class: "card-text" }, text(skill.simpleDescription[state.server]))
             ])
         ])
     ])

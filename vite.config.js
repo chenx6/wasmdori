@@ -1,6 +1,8 @@
 import { resolve } from 'path'
+import { defineConfig } from 'vite'
 
-export default {
+
+export default defineConfig({
   base: "/wasmdori/",
   build: {
     outDir: "docs",
@@ -12,6 +14,7 @@ export default {
         profile: resolve(__dirname, 'profile.html'),
         eventGacha: resolve(__dirname, 'gacha.html')
       }
-    }
+    },
+    sourcemap: true,
   }
-}
+})

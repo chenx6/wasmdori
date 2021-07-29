@@ -57,13 +57,14 @@ const geneEncodedStr = cards => {
  * @param {*} card Bestdori's card data
  * @param cardId card id
  * @param trained card is trained or not
+ * @param server resource server
  * @returns {string} url
  */
-const getResURL = (card, cardId, trained=true) => {
+const getResURL = (card, cardId, trained=true, server="jp") => {
     let partNum = Math.floor(parseInt(cardId) / 50);
     let part = partNum.toString().padStart(5, '0');
     let suffix = card.rarity <= 2 || !trained ? "normal" : "after_training"; // Card(rarity < 2) only has normal card image
-    return `https://bestdori.com/assets/cn/thumb/chara/card${part}_rip/${card.resourceSetName}_${suffix}.png`;
+    return `https://bestdori.com/assets/${server}/thumb/chara/card${part}_rip/${card.resourceSetName}_${suffix}.png`;
 }
 
 /**
