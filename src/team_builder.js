@@ -10,11 +10,11 @@ import {
     selectedProfileLoader
 } from "./utils.js"
 import { translates } from "./languages.js"
-import init, { gene_score } from '../libs/wasmdori.js';
+import init, { gene_score } from '../libs/bgp_team_builder';
 
 // Without argument will cause a error by rollup
 // (Can't handle import.meta.url)...
-init("./wasmdori_bg.wasm");
+init("./bgp_team_builder_bg.wasm");
 
 // Actions && Effects
 
