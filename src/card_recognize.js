@@ -62,11 +62,11 @@ const nextPage = () => [setPage, { number: +1 }]
 const ImageShowStatus = (state) => ({ ...state, showImage: !state.showImage })
 
 const SelectAll = (state) => {
-    // If selectedCard is full, remove all selected card
-    state.selectedCard.size == state.tableData.length
-        ? state.selectedCard.clear()
+    // If selectedCard === tableData, remove tableData in selectedCard
+    // else add all card in tableData
+    state.tableData.every(v => state.selectedCard.has(v))
+        ? state.tableData.forEach(v => state.selectedCard.delete(v))
         : state.tableData.forEach(v => state.selectedCard.add(v))
-    // Weird behavior, it need declaim selectedCard again to update data
     return { ...state, selectedCard: state.selectedCard };
 }
 
