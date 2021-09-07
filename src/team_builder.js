@@ -242,13 +242,19 @@ const eventTypeInput = state => h("div", { class: "row p-1" }, [
 ])
 
 const resultTeamView = state => h("div", { class: "row justify-content-md-center p-1" },
-    Object.values(state.bestTeam).map((v) => h("div", { class: "card col" }, [
-        // Use getResURL to get card's image
-        h("img", { src: getResURL(state.rawCards[v.card_id], v.card_id), width: "64", class: "card-img-top" }),
-        h("ul", { class: "list-group list-group-flush" }, [
-            h("li", { class: "list-group-item text-truncate" }, text(state.rawCards[v.card_id].prefix[state.server]))
-        ])
-    ]))
+    [
+        h("div", { class: "alert alert-info" }, text(state.language.generateSuccess)),
+        h("div", {}, text(state.language.selectedBand + state.bestTeam.band_name)),
+        h("div", {}, text(state.language.selectedMagazine + state.bestTeam.magazine)),
+        h("div", {}, text(state.language.selectedProp + state.bestTeam.prop)),
+        Object.values(state.bestTeam.best_team).map((v) => h("div", { class: "card col" }, [
+            // Use getResURL to get card's image
+            h("img", { src: getResURL(state.rawCards[v.card_id], v.card_id), width: "64", class: "card-img-top" }),
+            h("ul", { class: "list-group list-group-flush" }, [
+                h("li", { class: "list-group-item text-truncate" }, text(state.rawCards[v.card_id].prefix[state.server]))
+            ])
+        ]))
+    ].flat()
 )
 
 // App
